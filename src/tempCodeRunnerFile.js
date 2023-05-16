@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
-import Chart from 'chart.js/auto';
 
 function App() {
   const [wordFrequencies, setWordFrequencies] = useState(null);
@@ -33,42 +32,6 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    if (wordFrequencies) {
-      const sortedFrequencies = Object.entries(wordFrequencies)
-        .sort(([, frequencyA], [, frequencyB]) => frequencyB - frequencyA)
-        .slice(0, 20);
-
-      const labels = sortedFrequencies.map(([word]) => word);
-      const data = sortedFrequencies.map(([, frequency]) => frequency);
-
-      const ctx = document.getElementById('chart').getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Word Frequency',
-              data,
-              backgroundColor: 'rgba(75, 192, 192, 0.6)',
-              borderColor: 'rgba(75, 192, 192, 5)',
-              borderWidth: 1,
-            },
-          ],
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-              stepSize: 1,
-            },
-          },
-        },
-      });
-    }
-  }, [wordFrequencies]);
-
   return (
     <div>
       <button onClick={fetchWordFrequencies}>Submit</button>
@@ -83,7 +46,6 @@ function App() {
             ))}
           </ul>
           <button onClick={exportToCSV}>Export</button>
-          <canvas id="chart" width="400" height="200"></canvas>
         </div>
       )}
     </div>
